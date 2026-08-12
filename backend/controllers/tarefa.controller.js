@@ -26,4 +26,17 @@ export default class TarefaController {
       return res.status(500).json({ message: "Erro ao criar tarefa.", error });
     }
   }
+
+  static async listarTarefas(req, res) {
+    try {
+      const tarefas = await Tarefa.find();
+      return res
+        .status(200)
+        .json({ message: "Tarefas listadas com sucesso.", tarefas });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erro ao listar tarefas.", error });
+    }
+  }
 }
