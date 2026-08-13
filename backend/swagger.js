@@ -7,7 +7,7 @@ const doc = {
       "Laboratório de Desenvolvimento Web - Documentação da API com Swagger",
   },
   host: "localhost:5000",
-  basePath: "/api/v1",
+  basePath: "/",
 };
 
 // Nome do arquivo que será gerado automaticamente
