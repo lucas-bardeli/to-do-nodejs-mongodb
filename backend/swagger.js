@@ -2,7 +2,7 @@ import swaggerAutogen from "swagger-autogen";
 
 const doc = {
   info: {
-    title: "To-Do-List Node.js MongoDB API",
+    title: "To-Do List Node.js e MongoDB API",
     description:
       "Laboratório de Desenvolvimento Web - Documentação da API com Swagger",
   },
