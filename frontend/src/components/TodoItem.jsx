@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function TodoItem({ todo }) {
   return (
     <div
@@ -10,9 +8,9 @@ export default function TodoItem({ todo }) {
         <div className="font-medium">{todo.titulo}</div>
         <div className="text-sm text-gray-600">{todo.descricao}</div>
         <div className="text-sm">
-          Data Limite:{new Date(todo.data_limite).toLocaleDateString()}
+          Data Limite: {new Date(todo.data_limite).toLocaleDateString()}
         </div>
-        <div className="text-sm">Situação:{todo.situacao}</div>
+        <div className="text-sm">Situação: {todo.situacao}</div>
       </div>
     </div>
   );

@@ -1,10 +1,36 @@
+import { useEffect, useState } from "react";
+import { listarTarefas } from "../api";
+import { Link } from "react-router-dom";
+import TodoItem from "../components/TodoItem";
+
 export default function TodoList() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [tarefas, setTarefas] = useState([]);
+
+  useEffect(() => {
+    const carregarTarefas = async () => {
+      setLoading(true);
+
+      try {
+        const response = await listarTarefas();
+        setTarefas(response.data.tarefas);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregarTarefas();
+  }, []);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
         <Link
           to="/new"
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition-all flex items-center gap-2"
+          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded shadow-sm transition-all"
         >
           Nova Tarefa
         </Link>
@@ -12,10 +38,10 @@ export default function TodoList() {
       {loading && <p>Carregando...</p>}
       {error && <p className="text-red-600">{error}</p>}
       <div className="space-y-3">
-        {todos?.length === 0 && !loading ? (
+        {tarefas?.length === 0 && !loading ? (
           <p className="text-gray-500">Nenhuma Tarefa encontrada!</p>
         ) : (
-          todos?.map((todo) => <TodoItem key={todo._id} todo={todo} />)
+          tarefas?.map((t) => <TodoItem key={t._id} todo={t} />)
         )}
       </div>
     </div>

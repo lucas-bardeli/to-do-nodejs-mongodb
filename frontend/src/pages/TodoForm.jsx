@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { criarTarefa } from "../api";
 
@@ -16,16 +16,14 @@ export default function TodoForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
 
     try {
-      setSaving(true);
-
       await criarTarefa(tarefa);
-
       navigate(-1);
     } catch (error) {
       alert(`Erro ao criar tarefa: ${error.message || error}`);
-      // navigate("/");
+      navigate("/");
     } finally {
       setSaving(false);
     }
