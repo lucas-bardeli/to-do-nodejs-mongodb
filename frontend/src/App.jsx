@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import TodoForm from "./pages/TodoForm";
-import TodoList from "./pages/TodoList";
+// import TodoList from "./pages/TodoList";
 import logoTodo from "./assets/logo-todo.png";
 
 export default function App() {
@@ -10,13 +9,13 @@ export default function App() {
       <header className="max-w-3xl mx-auto mb-6">
         <nav className="flex items-center justify-between">
           <h1 className="text-2xl font-semibold">
-            <img src={logoTodo} alt="Logo ToDo" className="h-12 w-auto" />
+            <img src={logoTodo} alt="Logo ToDo" className="h-28 w-auto" />
           </h1>
         </nav>
       </header>
-      <main className="max-w-3xl mx-auto bg-white rouded-lg shadow p-6">
+      <main className="max-w-3xl mx-auto bg-white rounded-lg shadow p-6">
         <Routes>
-          <Route path="/" element={<TodoList />} />
+          {/* <Route path="/" element={<TodoList />} /> */}
           <Route path="/new" element={<TodoForm />} />
         </Routes>
       </main>
