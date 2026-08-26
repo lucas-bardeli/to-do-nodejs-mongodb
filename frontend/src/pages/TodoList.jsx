@@ -5,7 +5,7 @@ import TodoItem from "../components/TodoItem";
 
 export default function TodoList() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null);
   const [tarefas, setTarefas] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function TodoList() {
         const response = await listarTarefas();
         setTarefas(response.data.tarefas);
       } catch (error) {
-        setError(true);
+        setError(error);
       } finally {
         setLoading(false);
       }

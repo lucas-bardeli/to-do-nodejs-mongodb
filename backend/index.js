@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import tarefaRoutes from "./routes/tarefa.routes.js";
 import swaggerUi from "swagger-ui-express";
 import { createRequire } from "module";
+import tarefaRoutes from "./routes/tarefa.routes.js";
+import usuarioRoutes from "./routes/usuario.routes.js";
 
 // Suporte para importar arquivos JSON usando ESModules
 const require = createRequire(import.meta.url);
@@ -24,7 +25,8 @@ app.use(
 // Obrigatório que o Swagger deva vir antes das rotas
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use("/api/v1/tarefas", tarefaRoutes);
+app.use("/tarefas", tarefaRoutes);
+app.use("/usuarios", usuarioRoutes);
 
 const PORT = process.env.PORT || 5000;
 

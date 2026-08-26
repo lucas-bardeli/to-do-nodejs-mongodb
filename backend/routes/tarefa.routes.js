@@ -1,9 +1,9 @@
 import { Router } from "express";
 import TarefaController from "../controllers/tarefa.controller.js";
 
-const router = Router();
+const tarefaRoutes = Router();
 
-router.post("/", TarefaController.criarTarefa);
-router.get("/", TarefaController.listarTarefas);
+tarefaRoutes.post("/", TarefaController.criarTarefa);
+tarefaRoutes.get("/", TarefaController.listarTarefas);
 
-export default router;
+export default tarefaRoutes;
