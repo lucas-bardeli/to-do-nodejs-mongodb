@@ -12,7 +12,7 @@ const tarefaSchema = new Schema(
       type: String,
       required: true,
     },
-    data_limite: {
+    dataLimite: {
       type: Date,
       required: true,
     },
@@ -20,6 +20,17 @@ const tarefaSchema = new Schema(
       type: String,
       required: true,
     },
+    criadaPor: {
+      type: Schema.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
+    },
+    participam: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Usuario",
+      },
+    ],
   },
   {
     timestamps: true,

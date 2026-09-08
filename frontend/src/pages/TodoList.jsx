@@ -36,7 +36,11 @@ export default function TodoList() {
         </Link>
       </div>
       {loading && <p>Carregando...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {error && (
+        <p className="text-red-600">
+          {error.response?.data?.message || error.message}
+        </p>
+      )}
       <div className="space-y-3">
         {tarefas?.length === 0 && !loading ? (
           <p className="text-gray-500">Nenhuma Tarefa encontrada!</p>

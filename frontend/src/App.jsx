@@ -1,10 +1,11 @@
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, Navigate } from "react-router-dom";
 import TodoForm from "./pages/TodoForm";
 import TodoList from "./pages/TodoList";
 import logoTodo from "./assets/logo-todo.png";
 import Login from "./pages/Login";
 import { useState, useEffect } from "react";
 import { logout, getProfile } from "./api";
+import LandingPage from "./pages/LandingPage";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,7 +38,7 @@ export default function App() {
       console.error("Erro ao fazer logout: ", error);
     } finally {
       setIsAuthenticated(false);
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -51,43 +52,92 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <header className="max-w-3xl mx-auto mb-4">
-        <nav className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
-            <img src={logoTodo} alt="Logo ToDo" className="h-16 w-auto" />
-          </h1>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? <Navigate to="/tarefas" replace /> : <LandingPage />
+        }
+      />
+      <Route
+        path="/*"
+        element={
+          <div className="min-h-screen bg-gray-50 p-4">
+            <header className="max-w-3xl mx-auto mb-4">
+              <nav className="flex items-center py-4 justify-between border-b border-gray-200">
+                <h1 className="text-2xl font-semibold">
+                  <Link to={isAuthenticated ? "/tarefas" : "/"}>
+                    <img
+                      src={logoTodo}
+                      alt="Logo ToDo"
+                      className="h-16 w-auto"
+                    />
+                  </Link>
+                </h1>
 
-          <div>
-            {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
-              >
-                Sair
-              </button>
-            ) : (
-              <Link
-                to="/login"
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
-              >
-                Entrar
-              </Link>
-            )}
+                <div className="flex items-center gap-4">
+                  {isAuthenticated && (
+                    <>
+                      <Link
+                        to="/tarefas"
+                        className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                      >
+                        Tarefas
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
+                      >
+                        Sair
+                      </button>
+                    </>
+                  )}
+                </div>
+              </nav>
+            </header>
+
+            <main className="max-w-3xl mx-auto">
+              <Routes>
+                <Route
+                  path="tarefas"
+                  element={
+                    isAuthenticated ? (
+                      <TodoList />
+                    ) : (
+                      <Navigate to="/login" replace />
+                    )
+                  }
+                />
+                <Route
+                  path="new"
+                  element={
+                    isAuthenticated ? (
+                      <TodoForm />
+                    ) : (
+                      <Navigate to="/login" replace />
+                    )
+                  }
+                />
+                <Route
+                  path="login"
+                  element={
+                    isAuthenticated ? (
+                      <Navigate to="/tarefas" replace />
+                    ) : (
+                      <Login
+                        onLoginSuccess={() => {
+                          setIsAuthenticated(true);
+                          navigate("/tarefas");
+                        }}
+                      />
+                    )
+                  }
+                />
+              </Routes>
+            </main>
           </div>
-        </nav>
-      </header>
-
-      <main className="max-w-3xl mx-auto bg-white rounded-lg shadow p-6">
-        <Routes>
-          <Route path="/" element={<TodoList />} />
-          <Route path="/new" element={<TodoForm />} />
-          <Route
-            path="/login"
-            element={<Login onLoginSuccess={() => setIsAuthenticated(true)} />}
-          />
-        </Routes>
-      </main>
-    </div>
+        }
+      />
+    </Routes>
   );
 }

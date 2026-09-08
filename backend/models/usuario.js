@@ -21,11 +21,11 @@ const usuarioSchema = new Schema(
       required: true,
       select: false,
     },
-    reset_token: {
+    resetToken: {
       type: String,
       select: false,
     },
-    reset_token_expire: {
+    resetTokenExpire: {
       type: Date,
       select: false,
     },

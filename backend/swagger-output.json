@@ -27,10 +27,13 @@
                 "descricao": {
                   "example": "any"
                 },
-                "data_limite": {
+                "dataLimite": {
                   "example": "any"
                 },
                 "situacao": {
+                  "example": "any"
+                },
+                "participam": {
                   "example": "any"
                 }
               }
@@ -218,6 +221,19 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/usuarios/getUsersExceptLogged": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"

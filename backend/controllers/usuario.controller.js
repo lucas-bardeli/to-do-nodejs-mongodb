@@ -1,6 +1,8 @@
 import Usuario from "../models/usuario.js";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import { sendPasswordResetEmail } from "../services/email.service.js";
+import crypto from "crypto";
 
 export default class UsuarioController {
   static async registrarUsuario(req, res) {
@@ -119,13 +121,14 @@ export default class UsuarioController {
 
       const resetToken = crypto.randomBytes(32).toString("hex");
       const hashToken = await argon2.hash(resetToken);
-      const resetTokenExpiry = new Date(
-        Date.now() + RESET_TOKEN_EXPIRATION_HOURS * 60 * 60 * 1000,
+      const resetTokenExpire = new Date(
+        Date.now() +
+          (process.env.RESET_TOKEN_EXPIRATION_HOURS || 1) * 60 * 60 * 1000,
       );
 
       await Usuario.findByIdAndUpdate(usuario.id, {
         resetToken: hashToken,
-        resetTokenExpiry: resetTokenExpiry,
+        resetTokenExpire: resetTokenExpire,
       });
 
       sendPasswordResetEmail(usuario.email, resetToken).catch((err) => {
@@ -134,7 +137,6 @@ export default class UsuarioController {
 
       return res.status(200).json({
         message: "Se o e-mail estiver cadastrado, um link será enviado.",
-        resetToken,
       });
     } catch (error) {
       return res.status(200).json({
@@ -154,17 +156,17 @@ export default class UsuarioController {
 
     try {
       // Busca usuários que possuem um token válido e não expirado
-      // Observação: select('+resetToken +resetTokenExpiry') força a busca desses campos caso estejam ocultos no Schema
+      // Observação: select('+resetToken +resetTokenExpire') força a busca desses campos caso estejam ocultos no Schema
       const usuarios = await Usuario.find({
-        resetTokenExpiry: { $gt: Date.now() }, // $gt = Greater Than (Data de expiração maior que 'agora')
-      }).select("+resetToken +resetTokenExpiry");
+        resetTokenExpire: { $gt: Date.now() }, // $gt = Greater Than (Data de expiração maior que 'agora')
+      }).select("+resetToken +resetTokenExpire");
 
       let usuarioValido = null;
 
       // Compara o token recebido com os hashes salvos no banco
       for (const usuario of usuarios) {
-        if (usuario.reset_token) {
-          const tokenValido = await argon2.verify(usuario.reset_token, token);
+        if (usuario.resetToken) {
+          const tokenValido = await argon2.verify(usuario.resetToken, token);
           if (tokenValido) {
             usuarioValido = usuario;
             break;
@@ -181,8 +183,8 @@ export default class UsuarioController {
 
       // Atualiza a senha e limpa o token de recuperação
       usuarioValido.senha = hashNovaSenha;
-      usuarioValido.reset_token = undefined;
-      usuarioValido.reset_token_expire = undefined;
+      usuarioValido.resetToken = undefined;
+      usuarioValido.resetTokenExpire = undefined;
 
       await usuarioValido.save();
 
@@ -212,9 +214,9 @@ export default class UsuarioController {
       const dadosUsuario = await Usuario.findById(userId);
 
       if (!dadosUsuario)
-        return res.status(404).json({ message: "Usuário não encontrado" });
+        return res.status(404).json({ message: "Usuário não encontrado." });
 
-      console.log("USUÁRIO DO BANCO: ", dadosUsuario);
+      console.log("USUÁRIO DO BANCO:", dadosUsuario);
 
       // Retorna os dados do banco para o Frontend
       return res.status(200).json({ usuario: dadosUsuario });
@@ -223,6 +225,23 @@ export default class UsuarioController {
       return res
         .status(500)
         .json({ message: "Erro ao buscar usuário.", error: error.message });
+    }
+  }
+
+  static async getAllExceptLogged(req, res) {
+    try {
+      const usuarioLogado = req.user.id;
+      const usuarios = await Usuario.find({
+        _id: { $ne: usuarioLogado },
+      })
+        .select("nome")
+        .sort({ nome: -1 });
+
+      return res.status(200).json({ usuarios });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Problema ao buscar usuários.", error });
     }
   }
 }

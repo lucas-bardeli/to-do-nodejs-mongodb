@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
+  withCredentials: true, // Permite o envio de cookies e sessões
   headers: {
     "Content-Type": "application/json",
   },
@@ -18,5 +19,7 @@ export const resetPassword = (payload) =>
 export const forgotPassword = (payload) =>
   api.post("/usuarios/forgotPassword", payload);
 export const getProfile = () => api.get("/usuarios/me");
+export const getUsersExceptLogged = () =>
+  api.get("/usuarios/getUsersExceptLogged");
 
 export default api;
