@@ -17,10 +17,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Envia e-mail com link de redefinição de senha
-// parâmetro toEmail (string) - E-mail do usuário destinatário
-// parâmetro token (string) - Token gerado para redefinição
-
 export const sendPasswordResetEmail = async (toEmail, token) => {
   const resetLink = `${FRONTEND_URL}/reset-password?token=${token}`;
 
@@ -42,6 +38,4 @@ export const sendPasswordResetEmail = async (toEmail, token) => {
       </div>
     `,
   });
-
-  console.log(`E-mail de redefinição enviado com sucesso para: ${toEmail}`);
 };

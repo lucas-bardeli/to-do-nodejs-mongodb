@@ -30,5 +30,5 @@ const mensagemSchema = new Schema(
   },
 );
 
-const Tarefa = mongoose.model("Mensagem", mensagemSchema);
-export default Tarefa;
+const Mensagem = mongoose.model("Mensagem", mensagemSchema);
+export default Mensagem;
