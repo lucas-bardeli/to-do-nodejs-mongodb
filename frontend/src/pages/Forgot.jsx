@@ -1,28 +1,23 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api";
+import { forgotPassword } from "../api";
 
-export default function Login({ onLoginSuccess }) {
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      await login({ email, senha });
-
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-
-      navigate("/");
+      const response = await forgotPassword({ email });
+      alert(
+        response.data.message ||
+          "Solicitação de redefinição de senha enviada com sucesso!",
+      );
     } catch (error) {
       alert(
-        "Erro ao efetuar login: " +
+        "Erro ao solicitar redefinição de senha: " +
           (error.response?.data?.message || error.message || error),
       );
     } finally {
@@ -33,8 +28,11 @@ export default function Login({ onLoginSuccess }) {
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-xl border border-gray-200">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        Entrar no Sistema
+        Esqueci minha senha
       </h2>
+      <p className="text-gray-600 text-center mb-6">
+        Digite seu e-mail e enviaremos um link para redefinir sua senha.
+      </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -52,21 +50,6 @@ export default function Login({ onLoginSuccess }) {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Senha
-          </label>
-          <input
-            type="password"
-            required
-            disabled={loading}
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            placeholder="••••••••"
-            className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
-          />
-        </div>
-
         <button
           type="submit"
           disabled={loading}
@@ -78,25 +61,10 @@ export default function Login({ onLoginSuccess }) {
               Carregando...
             </span>
           ) : (
-            "Entrar"
+            "Solicitar Redefinição de Senha"
           )}
         </button>
       </form>
-
-      <div className="mt-5 text-center flex flex-col gap-2 pt-2">
-        <Link
-          to="/forgot"
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-        >
-          Esqueci a senha
-        </Link>
-        <Link
-          to="/register"
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-        >
-          Ainda não possui uma conta? Cadastre-se
-        </Link>
-      </div>
     </div>
   );
 }

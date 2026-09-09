@@ -6,6 +6,9 @@ import Login from "./pages/Login";
 import { useState, useEffect } from "react";
 import { logout, getProfile } from "./api";
 import LandingPage from "./pages/LandingPage";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/Forgot";
+import ResetPassword from "./pages/Reset";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -130,6 +133,36 @@ export default function App() {
                           navigate("/tarefas");
                         }}
                       />
+                    )
+                  }
+                />
+                <Route
+                  path="register"
+                  element={
+                    isAuthenticated ? (
+                      <Navigate to="/tarefas" replace />
+                    ) : (
+                      <Register />
+                    )
+                  }
+                />
+                <Route
+                  path="forgot"
+                  element={
+                    isAuthenticated ? (
+                      <Navigate to="/tarefas" replace />
+                    ) : (
+                      <ForgotPassword />
+                    )
+                  }
+                />
+                <Route
+                  path="reset-password"
+                  element={
+                    isAuthenticated ? (
+                      <Navigate to="/tarefas" replace />
+                    ) : (
+                      <ResetPassword />
                     )
                   }
                 />

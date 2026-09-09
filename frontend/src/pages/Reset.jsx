@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { resetPassword } from "../api";
 
-export default function Login({ onLoginSuccess }) {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+export default function ResetPassword() {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") || "";
+  const [novaSenha, setNovaSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -13,16 +14,12 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      await login({ email, senha });
-
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-
-      navigate("/");
+      const response = await resetPassword({ token, novaSenha });
+      alert(response.data.message || "Senha redefinida com sucesso!");
+      navigate("/login");
     } catch (error) {
       alert(
-        "Erro ao efetuar login: " +
+        "Erro ao solicitar redefinição de senha: " +
           (error.response?.data?.message || error.message || error),
       );
     } finally {
@@ -33,36 +30,21 @@ export default function Login({ onLoginSuccess }) {
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-xl border border-gray-200">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        Entrar no Sistema
+        Redefinir Senha
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            E-mail
-          </label>
-          <input
-            type="email"
-            required
-            disabled={loading}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="seu@email.com"
-            className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Senha
+            Nova Senha
           </label>
           <input
             type="password"
             required
             disabled={loading}
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            placeholder="••••••••"
+            value={novaSenha}
+            onChange={(e) => setNovaSenha(e.target.value)}
+            placeholder="Digite sua nova senha"
             className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
           />
         </div>
@@ -78,25 +60,10 @@ export default function Login({ onLoginSuccess }) {
               Carregando...
             </span>
           ) : (
-            "Entrar"
+            "Redefinir Senha"
           )}
         </button>
       </form>
-
-      <div className="mt-5 text-center flex flex-col gap-2 pt-2">
-        <Link
-          to="/forgot"
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-        >
-          Esqueci a senha
-        </Link>
-        <Link
-          to="/register"
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-        >
-          Ainda não possui uma conta? Cadastre-se
-        </Link>
-      </div>
     </div>
   );
 }

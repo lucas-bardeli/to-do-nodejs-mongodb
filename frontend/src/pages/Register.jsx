@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api";
+import { registrarUsuario } from "../api";
 
-export default function Login({ onLoginSuccess }) {
+export default function Register() {
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,16 +14,12 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      await login({ email, senha });
+      await registrarUsuario({ nome, email, senha });
 
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       alert(
-        "Erro ao efetuar login: " +
+        "Erro ao registrar usuário: " +
           (error.response?.data?.message || error.message || error),
       );
     } finally {
@@ -33,10 +30,25 @@ export default function Login({ onLoginSuccess }) {
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-xl border border-gray-200">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        Entrar no Sistema
+        Registrar-se no Sistema
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nome
+          </label>
+          <input
+            type="text"
+            required
+            disabled={loading}
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            placeholder="Seu Nome"
+            className="w-full border border-gray-300 rounded-lg px-3.5 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:bg-gray-100"
+          />
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             E-mail
@@ -78,23 +90,17 @@ export default function Login({ onLoginSuccess }) {
               Carregando...
             </span>
           ) : (
-            "Entrar"
+            "Cadastrar-se"
           )}
         </button>
       </form>
 
-      <div className="mt-5 text-center flex flex-col gap-2 pt-2">
+      <div className="mt-5 text-center pt-2">
         <Link
-          to="/forgot"
+          to="/login"
           className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
         >
-          Esqueci a senha
-        </Link>
-        <Link
-          to="/register"
-          className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-        >
-          Ainda não possui uma conta? Cadastre-se
+          Já possui uma conta? Faça login
         </Link>
       </div>
     </div>

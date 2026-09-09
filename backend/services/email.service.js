@@ -31,7 +31,7 @@ export const sendPasswordResetEmail = async (toEmail, token) => {
     html: `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
         <h2>Solicitação de Redefinição de Senha</h2>
-        <p>Você solicitou a redefinição da sua senha no sistema <strong>ToDo</strong>.</p>
+        <p>Você solicitou a redefinição da sua senha no sistema <strong>To-Do List Node.js e MongoDB</strong>.</p>
         <p>Clique no botão abaixo para criar uma nova senha. Este link expira em <strong>1 hora</strong>:</p>
         <p style="margin: 20px 0;">
           <a href="${resetLink}" style="background-color: #007bff; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">

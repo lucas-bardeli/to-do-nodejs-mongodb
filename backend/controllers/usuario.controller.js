@@ -108,7 +108,7 @@ export default class UsuarioController {
   static async forgotPassword(req, res) {
     const { email } = req.body;
 
-    if (!email) return res.status(402).json({ message: "e-mail requerido" });
+    if (!email) return res.status(402).json({ message: "E-mail requerido." });
 
     try {
       const usuario = await Usuario.findOne({ email });
@@ -131,8 +131,8 @@ export default class UsuarioController {
         resetTokenExpire: resetTokenExpire,
       });
 
-      sendPasswordResetEmail(usuario.email, resetToken).catch((err) => {
-        console.error("Falha no envio do e-mail.");
+      await sendPasswordResetEmail(usuario.email, resetToken).catch((err) => {
+        console.error("Falha no envio do e-mail.", err);
       });
 
       return res.status(200).json({
@@ -200,7 +200,6 @@ export default class UsuarioController {
   static async profile(req, res) {
     try {
       const userToken = req.user;
-      console.log("TOKEN/PAYLOAD:", userToken);
 
       if (!userToken)
         return res.status(401).json({ message: "Não autenticado." });
@@ -215,8 +214,6 @@ export default class UsuarioController {
 
       if (!dadosUsuario)
         return res.status(404).json({ message: "Usuário não encontrado." });
-
-      console.log("USUÁRIO DO BANCO:", dadosUsuario);
 
       // Retorna os dados do banco para o Frontend
       return res.status(200).json({ usuario: dadosUsuario });
@@ -234,7 +231,7 @@ export default class UsuarioController {
       const usuarios = await Usuario.find({
         _id: { $ne: usuarioLogado },
       })
-        .select("nome")
+        .select("nome email")
         .sort({ nome: -1 });
 
       return res.status(200).json({ usuarios });
