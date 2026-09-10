@@ -22,4 +22,7 @@ export const getProfile = () => api.get("/usuarios/me");
 export const getUsersExceptLogged = () =>
   api.get("/usuarios/getUsersExceptLogged");
 
+export const getChatHistory = (tarefaId) =>
+  api.get(`/chat/getHistory/${tarefaId}`);
+
 export default api;
