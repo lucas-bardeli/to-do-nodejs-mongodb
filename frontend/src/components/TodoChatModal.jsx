@@ -56,13 +56,13 @@ export default function TodoChatModal({ tarefa, usuarioLogado, onClose }) {
   }, [mensagens]);
 
   const handleEnviar = (e) => {
-    e.prevendDefault();
+    e.preventDefault();
     if (!novoTexto.trim()) return;
 
     // Emitir mensagem preenchida
     socketRef.current.emit("send_message", {
       tarefaId: tarefa._id,
-      remetente: usuarioLogado._id || usuarioLogado.id,
+      remetenteId: usuarioLogado._id || usuarioLogado.id,
       texto: novoTexto,
     });
 

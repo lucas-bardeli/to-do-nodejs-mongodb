@@ -17,31 +17,26 @@ const swaggerDocument = require("./swagger-output.json");
 
 const app = express();
 
+const corsOptions = {
+  credentials: true,
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+};
+
 // Comunicação entre o front-end e o back-end usar JSON
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  }),
-);
+app.use(cors(corsOptions));
 
 // Criar um servidor HTTP
 const httpServer = createServer(app);
 
 // Iniciar o websocket
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(httpServer, { cors: corsOptions });
 
 io.on("connect", (socket) => {
   console.log(`Usuário conectado: ${socket.id}`);
   registerChatSocket(io, socket);
-  socket.on("disconnet", () => {
+  socket.on("disconnect", () => {
     console.log(`Usuário desconectado: ${socket.id}`);
   });
 });

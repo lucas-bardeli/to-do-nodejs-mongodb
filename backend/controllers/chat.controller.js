@@ -32,8 +32,6 @@ export default class ChatController {
       ).populate("remetente", "nome email");
 
       io.to(`tarefa_${tarefaId}`).emit("receive_message", mensagemPopulada);
-
-      return res.status(200).json({ novaMensagem });
     } catch (error) {
       console.error("Erro ao salvar/enviar mensagem no socket:", error);
       socket.emit("chat_error", {
