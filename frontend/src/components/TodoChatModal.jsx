@@ -82,7 +82,7 @@ export default function TodoChatModal({ tarefa, usuarioLogado, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-200 text-xl font-bold cursor-pointer"
+            className="text-gray-400 hover:text-gray-600 py-1 px-2.5 rounded-lg hover:bg-gray-200 text-xl font-bold cursor-pointer"
           >
             ✕
           </button>

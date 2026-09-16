@@ -12,6 +12,7 @@ import ResetPassword from "./pages/Reset";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -22,10 +23,12 @@ export default function App() {
         const response = await getProfile();
         if (response.status === 200) {
           setIsAuthenticated(true);
+          setUsuarioLogado(response.data.usuario || response.data);
         }
       } catch (error) {
-        console.log("Sessão não encontrada ou expirada: ", error);
+        console.log("Sessão não encontrada ou expirada:", error);
         setIsAuthenticated(false);
+        setUsuarioLogado(null);
       } finally {
         setLoading(false);
       }
@@ -38,9 +41,10 @@ export default function App() {
     try {
       await logout();
     } catch (error) {
-      console.error("Erro ao fazer logout: ", error);
+      console.error("Erro ao fazer logout:", error);
     } finally {
       setIsAuthenticated(false);
+      setUsuarioLogado(null);
       navigate("/");
     }
   };
@@ -105,7 +109,7 @@ export default function App() {
                   path="tarefas"
                   element={
                     isAuthenticated ? (
-                      <TodoList />
+                      <TodoList usuarioLogado={usuarioLogado} />
                     ) : (
                       <Navigate to="/login" replace />
                     )

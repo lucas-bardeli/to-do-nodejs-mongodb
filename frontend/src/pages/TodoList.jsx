@@ -3,7 +3,7 @@ import { listarTarefas } from "../api";
 import { Link } from "react-router-dom";
 import TodoItem from "../components/TodoItem";
 
-export default function TodoList() {
+export default function TodoList({ usuarioLogado }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [tarefas, setTarefas] = useState([]);
@@ -45,7 +45,9 @@ export default function TodoList() {
         {tarefas?.length === 0 && !loading ? (
           <p className="text-gray-500">Nenhuma Tarefa encontrada!</p>
         ) : (
-          tarefas?.map((t) => <TodoItem key={t._id} todo={t} />)
+          tarefas?.map((t) => (
+            <TodoItem key={t._id} todo={t} usuarioLogado={usuarioLogado} />
+          ))
         )}
       </div>
     </div>
