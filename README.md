@@ -38,25 +38,12 @@ Uma To-Do List com Node.js e MongoDB. Projeto sendo desenvolvido nas aulas de La
 │   ├── swagger.js                       # Geração da documentação Swagger
 │   ├── swagger-output.json              # Especificação gerada da API
 │   ├── controllers/                     # Regras de negócio das requisições
-│   │   ├── chat.controller.js
-│   │   ├── tarefa.controller.js
-│   │   └── usuario.controller.js
-│   ├── db/
-│   │   └── conn.js                      # Conexão com o MongoDB
-│   ├── middleware/
-│   │   └── user.js                      # Middleware de autenticação do usuário
+│   ├── db/                              # Conexão com o MongoDB
+│   ├── middleware/                      # Middleware de autenticação do usuário
 │   ├── models/                          # Schemas e modelos do MongoDB
-│   │   ├── mensagem.js
-│   │   ├── tarefa.js
-│   │   └── usuario.js
 │   ├── routes/                          # Rotas HTTP da aplicação
-│   │   ├── chat.routes.js
-│   │   ├── tarefa.routes.js
-│   │   └── usuario.routes.js
-│   ├── services/
-│   │   └── email.service.js             # Serviço de envio de e-mails
-│   └── socket/
-│       └── registerChatSocket.js        # Eventos do chat em tempo real
+│   ├── services/                        # Serviço de envio de e-mails
+│   └── socket/                          # Eventos do chat em tempo real
 ├── frontend/
 │   ├── package.json                     # Dependências e scripts do frontend
 │   ├── vite.config.js                   # Configuração do Vite
@@ -69,18 +56,8 @@ Uma To-Do List com Node.js e MongoDB. Projeto sendo desenvolvido nas aulas de La
 │       ├── index.css                    # Estilos globais
 │       ├── assets/                      # Imagens e outros recursos
 │       ├── components/                  # Componentes reutilizáveis
-│       │   ├── TodoChatModal.jsx
-│       │   └── TodoItem.jsx
-│       ├── hooks/                        # Hooks personalizados
-│       │   └── useVoiceRecognition.js
-│       └── pages/                        # Telas da aplicação
-│           ├── Forgot.jsx
-│           ├── LandingPage.jsx
-│           ├── Login.jsx
-│           ├── Register.jsx
-│           ├── Reset.jsx
-│           ├── TodoForm.jsx
-│           └── TodoList.jsx
+│       ├── hooks/                       # Hooks personalizados
+│       └── pages/                       # Telas da aplicação
 ├── .gitignore    # Ignora arquivos e pastas sensíveis
 └── README.md     # Sobre o projeto
 ```
@@ -139,11 +116,8 @@ No projeto, ele é usado para:
 
 No [useVoiceRecognition.js](frontend/src/hooks/useVoiceRecognition.js), as expressões regulares identificam a palavra-chave falada e capturam o texto que vem depois dela. Todas usam a flag `i`, que torna a busca indiferente a maiúsculas e minúsculas.
 
-| Expressão         | Uso                  | Exemplo                                                         |
-| ----------------- | -------------------- | --------------------------------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------- |
-| `/(?:título       | titulo)\s+(.+)/i`    | Identifica `título` ou `titulo` e captura o conteúdo do título. | `Título Comprar materiais`                                    |
-| `/(?:descrição    | descricao)\s+(.+)/i` | Aceita a palavra com ou sem acento e captura a descrição.       | `Descrição Revisar o relatório`                               |
-| `/(?:data         | data limite          | prazo)\s+(.+)/i`                                                | Reconhece os comandos de prazo e captura a expressão de data. | `Prazo amanhã`                                                                         |
-| `/(?:participante | participantes        | adicionar                                                       | incluir)\s+(.+)/i`                                            | Reconhece comandos para adicionar ou incluir participantes e captura o nome informado. | `Adicionar Maria` |
+Exemplo:
+
+`/(?:título|titulo)\s+(.+)/i`. Identifica `título` ou `titulo` e captura o conteúdo do título. Ex: `Título Comprar materiais`.
 
 Nessas expressões, `(?:...)` agrupa alternativas sem criar um grupo de captura, `\s+` exige um ou mais espaços e `(.+)` captura todo o texto restante. O resultado capturado pode ser usado para atualizar os estados do formulário, como título, descrição, data limite e participantes. A função `interpretarDataVoz` também reconhece datas relativas como `hoje`, `amanhã`, `depois de amanhã` e `daqui a N dias`.
