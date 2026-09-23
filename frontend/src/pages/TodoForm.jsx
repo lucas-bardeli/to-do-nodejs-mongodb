@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useNavigate } from "react-router-dom";
 import { criarTarefa, getUsersExceptLogged } from "../api";
+import { useVoiceRecognition } from "../hooks/useVoiceRecognition";
 
 export default function TodoForm() {
   const [titulo, setTitulo] = useState("");
@@ -13,6 +14,28 @@ export default function TodoForm() {
 
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
+  const {
+    textoOuvido,
+    setTextoOuvido,
+    ouvindo,
+    iniciarEscuta,
+    pararEscuta,
+    processarComandoVoz,
+    suportado,
+  } = useVoiceRecognition();
+
+  // Processar a fala passando lista de usuários e a função para marcar checkbox
+  useEffect(() => {
+    processarComandoVoz(
+      textoOuvido,
+      setTitulo,
+      setDescricao,
+      setDataLimite,
+      usuarios,
+      handleCheckboxChange,
+    );
+    setTextoOuvido("");
+  }, [textoOuvido, setTextoOuvido, usuarios]);
 
   useEffect(() => {
     async function fetchUsuarios() {
@@ -24,7 +47,7 @@ export default function TodoForm() {
         // Garante que só seta se for realmente um Array
         setUsuarios(Array.isArray(lista) ? lista : []);
       } catch (error) {
-        console.error("Erro ao carregar usuários: ", error);
+        console.error("Erro ao carregar usuários:", error);
         setUsuarios([]);
       } finally {
         setLoadingUsuarios(false);

@@ -92,6 +92,8 @@ Hooks personalizados são funções que começam com `use` e encapsulam lógica 
 
 O projeto possui o Hook [useVoiceRecognition.js](frontend/src/hooks/useVoiceRecognition.js), responsável por concentrar a lógica de preenchimento de tarefas por voz. Ele verifica se o navegador oferece `SpeechRecognition` ou `webkitSpeechRecognition`, configura o idioma `pt-BR`, inicia e interrompe a escuta, guarda a transcrição e expõe o estado de suporte da API. Assim, o componente de formulário pode usar essa lógica sem conhecer os detalhes dos eventos do microfone.
 
+---
+
 ### Array Params useEffect
 
 O segundo parâmetro de `useEffect` é um array de dependências. Ele informa ao React quando o efeito deve ser executado novamente:
@@ -101,6 +103,8 @@ O segundo parâmetro de `useEffect` é um array de dependências. Ele informa ao
 - sem array: executaria após toda renderização, o que pode causar trabalho ou efeitos repetidos desnecessariamente.
 
 As dependências devem conter os valores externos usados pelo efeito quando eles puderem mudar. O array vazio é apropriado apenas quando a configuração não depende de valores que mudam durante a vida do componente.
+
+---
 
 ### useRef
 
@@ -118,6 +122,8 @@ No [useVoiceRecognition.js](frontend/src/hooks/useVoiceRecognition.js), as expre
 
 Exemplo:
 
-`/(?:título|titulo)\s+(.+)/i`. Identifica `título` ou `titulo` e captura o conteúdo do título. Ex: `Título Comprar materiais`.
+- `/(?:título|titulo)\s+(.+)/i`.
+- Identifica `título` ou `titulo` e captura o conteúdo do título.
+- Ex: `Título Comprar materiais`.
 
 Nessas expressões, `(?:...)` agrupa alternativas sem criar um grupo de captura, `\s+` exige um ou mais espaços e `(.+)` captura todo o texto restante. O resultado capturado pode ser usado para atualizar os estados do formulário, como título, descrição, data limite e participantes. A função `interpretarDataVoz` também reconhece datas relativas como `hoje`, `amanhã`, `depois de amanhã` e `daqui a N dias`.
