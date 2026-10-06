@@ -56,7 +56,9 @@ export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
             <div>
               <span className="font-medium text-gray-700">Prazo:</span>{" "}
               {todo.dataLimite
-                ? new Date(todo.dataLimite).toLocaleDateString("pt-BR")
+                ? new Date(todo.dataLimite).toLocaleDateString("pt-BR", {
+                    timeZone: "UTC",
+                  })
                 : "Sem data"}
             </div>
             {criador && (

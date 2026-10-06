@@ -7,7 +7,7 @@ export default function TodoForm() {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataLimite, setDataLimite] = useState("");
-  const [situacao, setSituacao] = useState("owiuehfiuerh");
+  const [situacao, setSituacao] = useState("Pendente");
   const [participam, setParticipam] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [loadingUsuarios, setLoadingUsuarios] = useState(true);

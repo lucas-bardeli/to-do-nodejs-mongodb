@@ -62,12 +62,7 @@ export default class TarefaController {
 
   static async atualizarSituacao(req, res) {
     const { id, novaSituacao } = req.body;
-    const situacoesPermitidas = ["Pendente", "Concluida", "Cancelada"];
     const usuarioLogado = req.user.id;
-
-    if (!situacoesPermitidas.includes(novaSituacao)) {
-      return res.status(422).json({ message: "Situação inválida." });
-    }
 
     try {
       const tarefa = await Tarefa.findById(id);
