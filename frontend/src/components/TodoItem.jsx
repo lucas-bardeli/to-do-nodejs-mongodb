@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TodoChatModal from "./TodoChatModal";
-import { coresSituacao } from "../utils/coresSituacao";
+import { coresSituacao } from "../utils/situacao";
 
 export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
   const [isChatOpen, setIsChatOpen] = useState(false);

@@ -8,6 +8,7 @@ Uma To-Do List com Node.js e MongoDB. Projeto sendo desenvolvido nas aulas de La
 - **Express**: criação da API HTTP, definição de middlewares e organização das rotas.
 - **MongoDB + Mongoose**: armazenamento das tarefas, usuários e mensagens, com os schemas e modelos em `backend/models`.
 - **React**: construção da interface do frontend usando componentes, páginas e Hooks.
+- **ApexCharts + React ApexCharts**: visualização da quantidade de tarefas por situação em um gráfico de pizza.
 - **Vite**: servidor de desenvolvimento e ferramenta de build do frontend.
 - **React Router**: navegação entre login, cadastro, recuperação de senha, tarefas e criação de tarefas.
 - **Tailwind CSS**: estilização dos componentes com classes utilitárias.
@@ -21,6 +22,7 @@ Uma To-Do List com Node.js e MongoDB. Projeto sendo desenvolvido nas aulas de La
 
 - Criação de tarefas com título, descrição, data limite e situação;
 - Listagem das tarefas do usuário;
+- Exibição da quantidade de tarefas pendentes, concluídas e canceladas em um gráfico de pizza no modal [GraficoModal.jsx](frontend/src/components/GraficoModal.jsx), aberto pelo botão "Ver gráfico" na lista de tarefas;
 - Cadastro, login e logout de usuários;
 - Recuperação e redefinição de senha por e-mail, implementadas em [email.service.js](backend/services/email.service.js);
 - Adição de participantes às tarefas colaborativas;
