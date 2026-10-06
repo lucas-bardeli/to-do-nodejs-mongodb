@@ -7,6 +7,10 @@ export default function TodoList({ usuarioLogado }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [tarefas, setTarefas] = useState([]);
+  const [situacaoFiltro, setSituacaoFiltro] = useState("");
+  const tarefasFiltradas = situacaoFiltro
+    ? tarefas.filter((tarefa) => tarefa.situacao === situacaoFiltro)
+    : tarefas;
 
   useEffect(() => {
     const carregarTarefas = async () => {
@@ -47,6 +51,19 @@ export default function TodoList({ usuarioLogado }) {
         >
           Nova Tarefa
         </Link>
+        <div className="flex items-center gap-4">
+          <label>Filtrar por situação:</label>
+          <select
+            value={situacaoFiltro}
+            onChange={(event) => setSituacaoFiltro(event.target.value)}
+            aria-label="Filtro de situação"
+          >
+            <option value="">Todas</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Concluida">Concluida</option>
+            <option value="Cancelada">Cancelada</option>
+          </select>
+        </div>
       </div>
       {loading && <p>Carregando...</p>}
       {error && (
@@ -55,10 +72,10 @@ export default function TodoList({ usuarioLogado }) {
         </p>
       )}
       <div className="space-y-3">
-        {tarefas?.length === 0 && !loading ? (
+        {tarefasFiltradas.length === 0 && !loading ? (
           <p className="text-gray-500">Nenhuma Tarefa encontrada!</p>
         ) : (
-          tarefas?.map((t) => (
+          tarefasFiltradas.map((t) => (
             <TodoItem
               key={t._id}
               todo={t}
