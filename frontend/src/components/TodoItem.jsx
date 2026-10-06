@@ -1,7 +1,8 @@
 import { useState } from "react";
 import TodoChatModal from "./TodoChatModal";
+import { coresSituacao } from "../utils/coresSituacao";
 
-export default function TodoItem({ todo, usuarioLogado }) {
+export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Extrai as iniciais do nome (ex: "Carlos Silva" -> "CS")
@@ -35,17 +36,18 @@ export default function TodoItem({ todo, usuarioLogado }) {
             <p className="text-sm text-gray-600 mt-1">{todo.descricao}</p>
           </div>
 
-          <span
-            className={`px-2.5 py-1 text-xs font-semibold rounded-full shrink-0 ${
-              todo.situacao === "Concluida"
-                ? "bg-green-100 text-green-700"
-                : todo.situacao === "Pendente"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-gray-100 text-gray-700"
+          <select
+            value={todo.situacao}
+            onChange={(event) => onSituacaoChange(todo._id, event.target.value)}
+            aria-label="Situação da tarefa"
+            className={`shrink-0 cursor-pointer rounded-full border-0 px-2.5 py-1 text-xs font-semibold ${
+              coresSituacao[todo.situacao] ?? "bg-gray-100 text-gray-700"
             }`}
           >
-            {todo.situacao}
-          </span>
+            <option value="Pendente">Pendente</option>
+            <option value="Concluida">Concluida</option>
+            <option value="Cancelada">Cancelada</option>
+          </select>
         </div>
 
         {/* Rodapé do Card: Infos + Equipe + Botão de Chat */}

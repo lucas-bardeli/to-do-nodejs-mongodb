@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { criarTarefa, getUsersExceptLogged } from "../api";
 import { useVoiceRecognition } from "../hooks/useVoiceRecognition";
@@ -7,7 +7,7 @@ export default function TodoForm() {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataLimite, setDataLimite] = useState("");
-  const [situacao, setSituacao] = useState("Pendente");
+  const [situacao, setSituacao] = useState("owiuehfiuerh");
   const [participam, setParticipam] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [loadingUsuarios, setLoadingUsuarios] = useState(true);

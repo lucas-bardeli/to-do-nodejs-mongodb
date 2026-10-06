@@ -59,4 +59,43 @@ export default class TarefaController {
         .json({ message: "Erro ao listar tarefas.", error });
     }
   }
+
+  static async atualizarSituacao(req, res) {
+    const { id, novaSituacao } = req.body;
+    const situacoesPermitidas = ["Pendente", "Concluida", "Cancelada"];
+    const usuarioLogado = req.user.id;
+
+    if (!situacoesPermitidas.includes(novaSituacao)) {
+      return res.status(422).json({ message: "Situação inválida." });
+    }
+
+    try {
+      const tarefa = await Tarefa.findById(id);
+      if (!tarefa) {
+        return res.status(404).json({ message: "Tarefa não encontrada." });
+      }
+
+      const podeAlterar =
+        tarefa.criadaPor.toString() === usuarioLogado ||
+        tarefa.participam.some(
+          (participante) => participante.toString() === usuarioLogado,
+        );
+      if (!podeAlterar) {
+        return res
+          .status(403)
+          .json({ message: "Sem permissão para alterar esta tarefa." });
+      }
+
+      tarefa.situacao = novaSituacao;
+      await tarefa.save();
+
+      return res
+        .status(200)
+        .json({ message: "Situação atualizada com sucesso.", tarefa });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erro ao atualizar situação.", error });
+    }
+  }
 }

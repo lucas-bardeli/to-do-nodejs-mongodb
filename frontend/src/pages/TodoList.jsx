@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTarefas } from "../api";
+import { atualizarSituacao, listarTarefas } from "../api";
 import { Link } from "react-router-dom";
 import TodoItem from "../components/TodoItem";
 
@@ -25,6 +25,19 @@ export default function TodoList({ usuarioLogado }) {
     carregarTarefas();
   }, []);
 
+  const mudarSituacao = async (id, novaSituacao) => {
+    try {
+      await atualizarSituacao(id, novaSituacao);
+      setTarefas((atuais) =>
+        atuais.map((tarefa) =>
+          tarefa._id === id ? { ...tarefa, situacao: novaSituacao } : tarefa,
+        ),
+      );
+    } catch (error) {
+      setError(error.response?.data?.message || error.message);
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -46,7 +59,12 @@ export default function TodoList({ usuarioLogado }) {
           <p className="text-gray-500">Nenhuma Tarefa encontrada!</p>
         ) : (
           tarefas?.map((t) => (
-            <TodoItem key={t._id} todo={t} usuarioLogado={usuarioLogado} />
+            <TodoItem
+              key={t._id}
+              todo={t}
+              usuarioLogado={usuarioLogado}
+              onSituacaoChange={mudarSituacao}
+            />
           ))
         )}
       </div>

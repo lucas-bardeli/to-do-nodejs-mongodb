@@ -58,6 +58,7 @@ Uma To-Do List com Node.js e MongoDB. Projeto sendo desenvolvido nas aulas de La
 │       ├── components/                  # Componentes reutilizáveis
 │       ├── hooks/                       # Hooks personalizados
 │       └── pages/                       # Telas da aplicação
+│       └── utils/                       # Funções e lógicas reutilizáveis
 ├── .gitignore    # Ignora arquivos e pastas sensíveis
 └── README.md     # Sobre o projeto
 ```
