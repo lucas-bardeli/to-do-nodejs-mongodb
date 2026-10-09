@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { criarTarefa, getUsersExceptLogged } from "../api";
 import { useVoiceRecognition } from "../hooks/useVoiceRecognition";
@@ -7,7 +7,6 @@ export default function TodoForm() {
   const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataLimite, setDataLimite] = useState("");
-  const [situacao, setSituacao] = useState("Pendente");
   const [participam, setParticipam] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [loadingUsuarios, setLoadingUsuarios] = useState(true);
@@ -16,7 +15,6 @@ export default function TodoForm() {
   const navigate = useNavigate();
   const {
     textoOuvido,
-    setTextoOuvido,
     ouvindo,
     iniciarEscuta,
     pararEscuta,
@@ -24,18 +22,41 @@ export default function TodoForm() {
     suportado,
   } = useVoiceRecognition();
 
+  const handleCheckboxChange = useCallback(
+    (userId) => {
+      setParticipam((prev) =>
+        prev.includes(userId)
+          ? prev.filter((id) => id !== userId)
+          : [...prev, userId],
+      );
+    },
+    [setParticipam],
+  );
+
+  const selecionarParticipantePorVoz = useCallback((userId) => {
+    setParticipam((prev) => (prev.includes(userId) ? prev : [...prev, userId]));
+  }, []);
+
   // Processar a fala passando lista de usuários e a função para marcar checkbox
   useEffect(() => {
+    if (ouvindo || !textoOuvido || loadingUsuarios) return;
+
     processarComandoVoz(
       textoOuvido,
       setTitulo,
       setDescricao,
       setDataLimite,
       usuarios,
-      handleCheckboxChange,
+      selecionarParticipantePorVoz,
     );
-    setTextoOuvido("");
-  }, [textoOuvido, setTextoOuvido, usuarios]);
+  }, [
+    textoOuvido,
+    ouvindo,
+    loadingUsuarios,
+    usuarios,
+    processarComandoVoz,
+    selecionarParticipantePorVoz,
+  ]);
 
   useEffect(() => {
     async function fetchUsuarios() {
@@ -56,14 +77,6 @@ export default function TodoForm() {
     fetchUsuarios();
   }, []);
 
-  const handleCheckboxChange = (userId) => {
-    setParticipam((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId],
-    );
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -73,7 +86,7 @@ export default function TodoForm() {
         titulo,
         descricao,
         dataLimite,
-        situacao,
+        situacao: "Pendente",
         participam,
       });
       navigate("/tarefas");
@@ -96,7 +109,7 @@ export default function TodoForm() {
         {suportado && (
           <button
             type="button"
-            onClick={iniciarEscuta}
+            onClick={ouvindo ? pararEscuta : iniciarEscuta}
             className={`px-4 py-2 rounded-lg text-white font-medium text-sm transition-all flex items-center gap-2 cursor-pointer shadow-sm ${
               ouvindo
                 ? "bg-red-500 animate-pulse ring-4 ring-red-200"
@@ -127,8 +140,22 @@ export default function TodoForm() {
               <strong>"Participante [nome]"</strong> ou{" "}
               <strong>"Adicionar [nome]"</strong> — Seleciona o participante
             </li>
+            <li>
+              Fale um comando por vez e aguarde terminar de falar antes de
+              iniciar o próximo.
+            </li>
           </ul>
         </div>
+      )}
+
+      {(ouvindo || textoOuvido) && (
+        <p
+          aria-live="polite"
+          className="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700"
+        >
+          <strong>{ouvindo ? "Transcrição até agora:" : "Transcrição:"}</strong>{" "}
+          {textoOuvido || "Aguardando fala..."}
+        </p>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -178,22 +205,26 @@ export default function TodoForm() {
             <p className="text-sm text-gray-500">Carregando usuários...</p>
           ) : (
             <div className="max-h-40 overflow-y-auto border rounded p-3 space-y-2 bg-gray-50">
-              {Array.isArray(usuarios) && usuarios.length > 0 ? (
-                usuarios.map((user) => (
-                  <label
-                    key={user._id || user.id}
-                    className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-1 rounded"
-                  >
-                    <input
-                      type="checkbox"
-                      value={user._id || user.id}
-                      checked={participam.includes(user._id || user.id)}
-                      onChange={() => handleCheckboxChange(user._id || user.id)}
-                      className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">{user.nome}</span>
-                  </label>
-                ))
+              {usuarios.length > 0 ? (
+                usuarios.map((user) => {
+                  const userId = user._id || user.id;
+                  return (
+                    <label
+                      key={userId}
+                      className="flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-1 rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        value={userId}
+                        checked={participam.includes(userId)}
+                        onChange={() => handleCheckboxChange(userId)}
+                        className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                      />
+
+                      <span className="text-sm text-gray-700">{user.nome}</span>
+                    </label>
+                  );
+                })
               ) : (
                 <p className="text-sm text-gray-500 py-1">
                   Nenhum outro usuário disponível para adicionar.
