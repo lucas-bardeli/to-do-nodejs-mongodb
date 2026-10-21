@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { atualizarSituacao, listarTarefas } from "../api";
+import { atualizarSituacao, listarTarefas, deletarTarefa } from "../api";
 import { Link } from "react-router-dom";
 import TodoItem from "../components/TodoItem";
 import GraficoModal from "../components/GraficoModal";
@@ -43,6 +43,18 @@ export default function TodoList({ usuarioLogado }) {
       );
     } catch (error) {
       setError(error.response?.data?.message || error.message);
+    }
+  };
+
+  const handleDeletar = async (id) => {
+    try {
+      if (!confirm("Tem certeza que deseja deletar esta tarefa?")) {
+        return;
+      }
+      await deletarTarefa(id);
+      setTarefas((atuais) => atuais.filter((tarefa) => tarefa._id !== id));
+    } catch (error) {
+      alert(error.response?.data?.message || error.message);
     }
   };
 
@@ -97,6 +109,7 @@ export default function TodoList({ usuarioLogado }) {
                 todo={t}
                 usuarioLogado={usuarioLogado}
                 onSituacaoChange={mudarSituacao}
+                onDeletar={handleDeletar}
               />
             ))
           )}

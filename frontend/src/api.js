@@ -13,6 +13,7 @@ export const listarTarefas = () => api.get("/tarefas");
 export const criarTarefa = (task) => api.post("/tarefas", task);
 export const atualizarSituacao = (id, novaSituacao) =>
   api.patch("/tarefas", { id, novaSituacao });
+export const deletarTarefa = (id) => api.delete(`/tarefas/${id}`);
 
 // Usuários
 export const registrarUsuario = (usuario) => api.post("/usuarios", usuario);

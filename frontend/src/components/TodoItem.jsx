@@ -3,7 +3,12 @@ import TodoChatModal from "./TodoChatModal";
 import { coresSituacao } from "../utils/situacao";
 import { Trash, MessageCircle, User, Users, Clock } from "lucide-react";
 
-export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
+export default function TodoItem({
+  todo,
+  usuarioLogado,
+  onSituacaoChange,
+  onDeletar,
+}) {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Extrai as iniciais do nome (ex: "Carlos Silva" -> "CS")
@@ -24,6 +29,14 @@ export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
 
   // Lista com todos os nomes para tooltip
   const todosNomesParticipantes = participantes.map((p) => p.nome).join(", ");
+
+  const idCriador = criador?._id ?? criador;
+  const idUsuarioLogado = usuarioLogado?._id ?? usuarioLogado?.id;
+
+  const podeDeletar =
+    idCriador &&
+    idUsuarioLogado &&
+    String(idCriador) === String(idUsuarioLogado);
 
   return (
     <>
@@ -53,9 +66,15 @@ export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
               <option value="Cancelada">Cancelada</option>
             </select>
 
-            <button className="px-2.5 py-1.5 text-xs font-semibold text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 rounded-lg transition-colors cursor-pointer ml-auto">
-              <Trash size={14} />
-            </button>
+            {podeDeletar && (
+              <button
+                onClick={() => onDeletar(todo._id)}
+                className="px-2.5 py-1.5 text-xs font-semibold text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 rounded-lg transition-colors cursor-pointer ml-auto"
+                aria-label="Excluir tarefa"
+              >
+                <Trash size={14} />
+              </button>
+            )}
           </div>
         </div>
 

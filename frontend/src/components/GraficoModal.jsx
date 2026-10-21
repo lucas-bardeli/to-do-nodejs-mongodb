@@ -30,7 +30,7 @@ export default function GraficoModal({ tarefas, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Fechar gráfico"
-            className="rounded-lg px-2.5 py-1 text-xl font-bold text-gray-400 hover:bg-gray-200 hover:text-gray-600"
+            className="rounded-lg px-2.5 py-1 text-xl font-bold text-gray-400 hover:bg-gray-200 hover:text-gray-600 cursor-pointer"
           >
             ✕
           </button>

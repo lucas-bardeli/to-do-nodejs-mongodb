@@ -7,5 +7,6 @@ const tarefaRoutes = Router();
 tarefaRoutes.post("/", userMiddleware, TarefaController.criarTarefa);
 tarefaRoutes.get("/", userMiddleware, TarefaController.listarTarefas);
 tarefaRoutes.patch("/", userMiddleware, TarefaController.atualizarSituacao);
+tarefaRoutes.delete("/:id", userMiddleware, TarefaController.deletarTarefa);
 
 export default tarefaRoutes;

@@ -93,4 +93,30 @@ export default class TarefaController {
         .json({ message: "Erro ao atualizar situação.", error });
     }
   }
+
+  static async deletarTarefa(req, res) {
+    const { id } = req.params;
+    const usuarioLogado = req.user.id;
+
+    try {
+      const tarefa = await Tarefa.findById(id);
+      if (!tarefa) {
+        return res.status(404).json({ message: "Tarefa não encontrada." });
+      }
+
+      const podeDeletar = tarefa.criadaPor.toString() === usuarioLogado;
+      if (!podeDeletar) {
+        return res
+          .status(403)
+          .json({ message: "Sem permissão para deletar esta tarefa." });
+      }
+
+      await Tarefa.findByIdAndDelete(id);
+      return res.status(200).json({ message: "Tarefa deletada com sucesso." });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erro ao deletar tarefa.", error });
+    }
+  }
 }
