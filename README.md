@@ -17,6 +17,7 @@ Projeto desenvolvido nas aulas de Laboratório de Desenvolvimento Web.
 - **Swagger**: documentação e visualização dos endpoints da API em `/docs`.
 - **JWT, cookie-parser e CORS**: autenticação, leitura de cookies e controle da comunicação entre frontend e backend.
 - **Nodemailer**: envio dos e-mails usados no fluxo de recuperação e redefinição de senha.
+- **Lucide Icons**: biblioteca de ícones usada em botões, inputs e badges.
 
 ## 💡 Funcionalidades
 

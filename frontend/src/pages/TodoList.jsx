@@ -3,6 +3,7 @@ import { atualizarSituacao, listarTarefas } from "../api";
 import { Link } from "react-router-dom";
 import TodoItem from "../components/TodoItem";
 import GraficoModal from "../components/GraficoModal";
+import { ChartPie, Plus } from "lucide-react";
 
 export default function TodoList({ usuarioLogado }) {
   const [loading, setLoading] = useState(false);
@@ -48,19 +49,21 @@ export default function TodoList({ usuarioLogado }) {
   return (
     <>
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between flex-wrap gap-6 mb-4">
           <Link
             to="/new"
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded shadow-sm transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded shadow-sm transition-all"
           >
+            <Plus size={16} strokeWidth={2.5} />
             Nova Tarefa
           </Link>
 
           <button
             type="button"
             onClick={() => setIsChartOpen(true)}
-            className="rounded bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-200 cursor-pointer transition-all"
+            className="flex items-center gap-1.5 rounded bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-200 cursor-pointer transition-all"
           >
+            <ChartPie size={16} />
             Ver gráfico
           </button>
 

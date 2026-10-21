@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TodoChatModal from "./TodoChatModal";
 import { coresSituacao } from "../utils/situacao";
+import { Trash, MessageCircle, User, Users, Clock } from "lucide-react";
 
 export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -36,34 +37,50 @@ export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
             <p className="text-sm text-gray-600 mt-1">{todo.descricao}</p>
           </div>
 
-          <select
-            value={todo.situacao}
-            onChange={(event) => onSituacaoChange(todo._id, event.target.value)}
-            aria-label="Situação da tarefa"
-            className={`shrink-0 cursor-pointer rounded-full border-0 px-2.5 py-1 text-xs font-semibold ${
-              coresSituacao[todo.situacao] ?? "bg-gray-100 text-gray-700"
-            }`}
-          >
-            <option value="Pendente">Pendente</option>
-            <option value="Concluida">Concluida</option>
-            <option value="Cancelada">Cancelada</option>
-          </select>
+          <div className="flex items-center gap-3">
+            <select
+              value={todo.situacao}
+              onChange={(event) =>
+                onSituacaoChange(todo._id, event.target.value)
+              }
+              aria-label="Situação da tarefa"
+              className={`shrink-0 cursor-pointer rounded-full border-0 px-2.5 py-1 text-xs font-semibold ${
+                coresSituacao[todo.situacao] ?? "bg-gray-100 text-gray-700"
+              }`}
+            >
+              <option value="Pendente">Pendente</option>
+              <option value="Concluida">Concluida</option>
+              <option value="Cancelada">Cancelada</option>
+            </select>
+
+            <button className="px-2.5 py-1.5 text-xs font-semibold text-red-700 bg-red-100 hover:bg-red-200 border border-red-200 rounded-lg transition-colors cursor-pointer ml-auto">
+              <Trash size={14} />
+            </button>
+          </div>
         </div>
 
         {/* Rodapé do Card: Infos + Equipe + Botão de Chat */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
           <div className="flex items-center gap-4">
-            <div>
-              <span className="font-medium text-gray-700">Prazo:</span>{" "}
-              {todo.dataLimite
-                ? new Date(todo.dataLimite).toLocaleDateString("pt-BR", {
-                    timeZone: "UTC",
-                  })
-                : "Sem data"}
+            <div className="flex items-center gap-1">
+              <span className="font-medium text-gray-700 flex items-center gap-1">
+                <Clock size={14} />
+                Prazo:
+              </span>
+              <span>
+                {todo.dataLimite
+                  ? new Date(todo.dataLimite).toLocaleDateString("pt-BR", {
+                      timeZone: "UTC",
+                    })
+                  : "Sem data"}
+              </span>
             </div>
             {criador && (
-              <div>
-                <span className="font-medium text-gray-700">Criada por:</span>{" "}
+              <div className="flex items-center gap-1">
+                <span className="font-medium text-gray-700 flex items-center gap-1">
+                  <User size={14} />
+                  Criada por:
+                </span>
                 <span className="text-gray-900 font-medium">
                   {criador.nome}
                 </span>
@@ -78,7 +95,8 @@ export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
                 className="flex items-center gap-2"
                 title={`Participantes: ${todosNomesParticipantes}`}
               >
-                <span className="font-medium text-gray-700 hidden sm:inline">
+                <span className="font-medium text-gray-700 hidden sm:flex sm:items-center sm:gap-1.5">
+                  <Users size={14} />
                   Equipe:
                 </span>
 
@@ -114,8 +132,8 @@ export default function TodoItem({ todo, usuarioLogado, onSituacaoChange }) {
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors cursor-pointer ml-auto"
               title="Abrir chat da tarefa"
             >
-              <span>💬</span>
-              <span>Chat</span>
+              <MessageCircle size={14} />
+              Chat
             </button>
           </div>
         </div>

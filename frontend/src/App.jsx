@@ -9,6 +9,7 @@ import LandingPage from "./pages/LandingPage";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/Forgot";
 import ResetPassword from "./pages/Reset";
+import { LogOut } from "lucide-react";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -87,14 +88,15 @@ export default function App() {
                     <>
                       <Link
                         to="/tarefas"
-                        className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                        className="font-medium text-gray-600 hover:text-gray-900"
                       >
                         Tarefas
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
+                        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
                       >
+                        <LogOut size={16} strokeWidth={2.5} />
                         Sair
                       </button>
                     </>

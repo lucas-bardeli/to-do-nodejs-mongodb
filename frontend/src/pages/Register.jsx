@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registrarUsuario } from "../api";
+import { UserPlus } from "lucide-react";
 
 export default function Register() {
   const [nome, setNome] = useState("");
@@ -90,7 +91,10 @@ export default function Register() {
               Carregando...
             </span>
           ) : (
-            "Cadastrar-se"
+            <span className="flex items-center gap-2">
+              <UserPlus size={16} strokeWidth={2.5} />
+              Cadastrar-se
+            </span>
           )}
         </button>
       </form>

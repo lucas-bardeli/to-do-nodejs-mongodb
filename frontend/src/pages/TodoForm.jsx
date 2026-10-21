@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { criarTarefa, getUsersExceptLogged } from "../api";
 import { useVoiceRecognition } from "../hooks/useVoiceRecognition";
+import { Mic, Lightbulb } from "lucide-react";
 
 export default function TodoForm() {
   const [titulo, setTitulo] = useState("");
@@ -116,7 +117,8 @@ export default function TodoForm() {
                 : "bg-indigo-600 hover:bg-indigo-700"
             }`}
           >
-            🎙️ {ouvindo ? "Clique para Parar" : "Preencher por Voz"}
+            <Mic size={16} strokeWidth={2.25} />
+            {ouvindo ? "Clique para Parar" : "Preencher por Voz"}
           </button>
         )}
       </div>
@@ -124,7 +126,10 @@ export default function TodoForm() {
       {/* PAINEL DE DICAS DE COMANDOS */}
       {suportado && (
         <div className="mb-6 p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-xs text-indigo-800 space-y-1">
-          <p className="font-semibold">💡 Dicas de Comandos por Voz:</p>
+          <p className="font-semibold flex items-center gap-2">
+            <Lightbulb size={16} strokeWidth={2.25} />
+            Dicas de Comandos por Voz:
+          </p>
           <ul className="list-disc list-inside space-y-0.5 text-indigo-700">
             <li>
               <strong>"Título [seu texto]"</strong> — Preenche o título
@@ -245,7 +250,7 @@ export default function TodoForm() {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="px-4 py-2 border rounded hover:bg-gray-50 transition-colors cursor-pointer"
+            className="px-4 py-2 border rounded hover:bg-gray-200 transition-colors cursor-pointer"
           >
             Cancelar
           </button>

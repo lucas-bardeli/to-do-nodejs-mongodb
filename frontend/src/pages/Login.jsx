@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api";
+import { LogIn } from "lucide-react";
 
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
@@ -78,7 +79,10 @@ export default function Login({ onLoginSuccess }) {
               Carregando...
             </span>
           ) : (
-            "Entrar"
+            <span className="flex items-center gap-2">
+              <LogIn size={16} strokeWidth={2.5} />
+              Entrar
+            </span>
           )}
         </button>
       </form>
