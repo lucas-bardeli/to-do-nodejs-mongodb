@@ -14,12 +14,8 @@ export default function Login({ onLoginSuccess }) {
     setLoading(true);
 
     try {
-      await login({ email, senha });
-
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-
+      const response = await login({ email, senha });
+      if (onLoginSuccess) onLoginSuccess(response.data.usuario);
       navigate("/");
     } catch (error) {
       alert(

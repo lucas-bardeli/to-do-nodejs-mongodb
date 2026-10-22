@@ -134,8 +134,9 @@ export default function App() {
                       <Navigate to="/tarefas" replace />
                     ) : (
                       <Login
-                        onLoginSuccess={() => {
+                        onLoginSuccess={(usuario) => {
                           setIsAuthenticated(true);
+                          setUsuarioLogado(usuario);
                           navigate("/tarefas");
                         }}
                       />

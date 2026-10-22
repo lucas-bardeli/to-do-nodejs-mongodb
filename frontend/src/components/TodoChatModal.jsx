@@ -100,9 +100,12 @@ export default function TodoChatModal({ tarefa, usuarioLogado, onClose }) {
             </p>
           ) : (
             mensagens.map((msg, index) => {
+              const remetenteId = msg.remetente?._id ?? msg.remetente;
+              const usuarioId = usuarioLogado?._id ?? usuarioLogado?.id;
               const eMeu =
-                (msg.remetente?._id || msg.remetente) ===
-                (usuarioLogado._id || usuarioLogado.id);
+                remetenteId != null &&
+                usuarioId != null &&
+                String(remetenteId) === String(usuarioId);
 
               return (
                 <div
